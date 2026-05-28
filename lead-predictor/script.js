@@ -24,6 +24,85 @@ document.addEventListener('DOMContentLoaded', () => {
     const xAxisLabelsContainer = document.getElementById('x-axis-labels');
     const tooltip = document.getElementById('chart-tooltip');
     
+    // Translations
+    const translations = {
+        en: {
+            language: "Language",
+            currency: "Currency",
+            campaignStart: "Campaign Start",
+            campaignEnd: "Campaign End",
+            totalRevenue: "Total Revenue",
+            avgOrderValue: "Avg. Order Value",
+            leadResponseRate: "Lead Response Rate",
+            prospectResponseRate: "Prospect Response Rate",
+            prospects: "Prospects",
+            leads: "Leads",
+            customers: "Customers",
+            people: " people",
+            month: "Month"
+        },
+        bg: {
+            language: "Език",
+            currency: "Валута",
+            campaignStart: "Начало кампания",
+            campaignEnd: "Край кампания",
+            totalRevenue: "Общи приходи",
+            avgOrderValue: "Ср. стойност на поръчка",
+            leadResponseRate: "Отговори от лийдове",
+            prospectResponseRate: "Отговори от потенциални",
+            prospects: "Потенциални клиенти",
+            leads: "Лийдове",
+            customers: "Клиенти",
+            people: " души",
+            month: "Месец"
+        },
+        de: {
+            language: "Sprache",
+            currency: "Währung",
+            campaignStart: "Kampagnenstart",
+            campaignEnd: "Kampagnenende",
+            totalRevenue: "Gesamtumsatz",
+            avgOrderValue: "Durchschn. Bestellwert",
+            leadResponseRate: "Lead-Antwortrate",
+            prospectResponseRate: "Interessenten-Antwortrate",
+            prospects: "Interessenten",
+            leads: "Leads",
+            customers: "Kunden",
+            people: " Personen",
+            month: "Monat"
+        },
+        fr: {
+            language: "Langue",
+            currency: "Devise",
+            campaignStart: "Début de campagne",
+            campaignEnd: "Fin de campagne",
+            totalRevenue: "Revenu total",
+            avgOrderValue: "Valeur de comm. moy.",
+            leadResponseRate: "Taux réponse leads",
+            prospectResponseRate: "Taux réponse prospects",
+            prospects: "Prospects",
+            leads: "Leads",
+            customers: "Clients",
+            people: " personnes",
+            month: "Mois"
+        }
+    };
+    
+    let currentLang = 'en';
+
+    const languageSelect = document.getElementById('language-select');
+    languageSelect.addEventListener('change', (e) => {
+        currentLang = e.target.value;
+        const dict = translations[currentLang];
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key]) {
+                el.textContent = dict[key];
+            }
+        });
+        updateXAxis();
+    });
+
     // Config
     const MONTHS = 6;
     let maxChartValue = 120; // Will be dynamically adjusted
@@ -89,30 +168,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = document.createElement('div');
             row.className = 'bar-row';
 
-            // Calculate values for this month (linear interpolation)
             const mProspects = (totalProspects / MONTHS) * i;
             const mLeads = (totalLeads / MONTHS) * i;
             const mCustomers = (totalCustomers / MONTHS) * i;
 
-            // Widths percentages relative to maxChartValue
             const wp = (mProspects / maxChartValue) * 100;
             const wl = (mLeads / maxChartValue) * 100;
             const wc = (mCustomers / maxChartValue) * 100;
 
-            // Render bars (Customer is narrowest, on top)
             row.innerHTML = `
                 <div class="bar pros" style="width: ${wp}%"></div>
                 <div class="bar lead" style="width: ${wl}%"></div>
                 <div class="bar cust" style="width: ${wc}%"></div>
             `;
 
-            // Hover effects for Tooltip
             row.addEventListener('mousemove', (e) => {
                 tooltip.style.left = e.pageX + 15 + 'px';
                 tooltip.style.top = e.pageY - 30 + 'px';
                 tooltip.classList.add('visible');
                 
-                document.getElementById('tt-month').textContent = `Month #${i}`;
+                document.getElementById('tt-month-num').textContent = i;
                 document.getElementById('tt-prospects').textContent = formatNumber(mProspects);
                 document.getElementById('tt-leads').textContent = formatNumber(mLeads);
                 document.getElementById('tt-customers').textContent = formatNumber(mCustomers);
@@ -127,19 +202,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateXAxis() {
-        const sections = 6; // 0 to 6 = 7 labels
+        const sections = 6;
         xAxisLabelsContainer.innerHTML = '';
         const gridLinesContainer = document.querySelector('.grid-lines');
         gridLinesContainer.innerHTML = '';
 
+        const peopleText = translations[currentLang].people;
+
         for (let i = 0; i <= sections; i++) {
             const val = (maxChartValue / sections) * i;
-            // append x label
             const span = document.createElement('span');
-            span.textContent = formatNumber(val) + (i === sections || val === 0 ? ' people' : '');
+            span.textContent = formatNumber(val) + (i === sections || val === 0 ? peopleText : '');
             xAxisLabelsContainer.appendChild(span);
 
-            // append grid line
             const line = document.createElement('div');
             line.className = 'line';
             gridLinesContainer.appendChild(line);
