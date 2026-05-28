@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const aovInput = document.getElementById('aov');
     const leadRateInput = document.getElementById('lead-rate');
     const prospectRateInput = document.getElementById('prospect-rate');
+    const campaignStart = document.getElementById('campaign-start');
+    const campaignEnd = document.getElementById('campaign-end');
 
     // Displays
     const leadRateVal = document.getElementById('lead-rate-val');
@@ -114,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Config
-    const MONTHS = 6;
+    let MONTHS = 6;
     let maxChartValue = 120; // Will be dynamically adjusted
 
     function formatNumber(num) {
@@ -126,6 +128,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const aov = parseFloat(aovInput.value) || 1;
         const leadRate = parseFloat(leadRateInput.value) || 0;
         const prospectRate = parseFloat(prospectRateInput.value) || 0;
+
+        if (campaignStart.value && campaignEnd.value) {
+            const start = new Date(campaignStart.value);
+            const end = new Date(campaignEnd.value);
+            if (!isNaN(start) && !isNaN(end)) {
+                let monthsDiff = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth());
+                MONTHS = monthsDiff > 0 ? monthsDiff : 1;
+            }
+        }
 
         // Math
         // customers = revenue / aov
@@ -173,8 +184,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateXAxis();
 
-        // Create 6 months of data, assuming linear growth ending at total
+        const yAxisLabelsContainer = document.getElementById('y-axis-labels');
+        yAxisLabelsContainer.innerHTML = '';
+
+        // Create MONTHS of data, assuming linear growth ending at total
         for (let i = 1; i <= MONTHS; i++) {
+            const span = document.createElement('span');
+            span.textContent = i;
+            yAxisLabelsContainer.appendChild(span);
+
             const row = document.createElement('div');
             row.className = 'bar-row';
 
@@ -232,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Event Listeners
-    [revenueInput, aovInput, leadRateInput, prospectRateInput].forEach(input => {
+    [revenueInput, aovInput, leadRateInput, prospectRateInput, campaignStart, campaignEnd].forEach(input => {
         input.addEventListener('input', calculate);
     });
 
