@@ -103,6 +103,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updateXAxis();
     });
 
+    const currencySelect = document.getElementById('currency-select');
+    const currencySymbols = document.querySelectorAll('.currency-symbol');
+    
+    currencySelect.addEventListener('change', (e) => {
+        const symbol = e.target.value;
+        currencySymbols.forEach(el => {
+            el.textContent = symbol;
+        });
+    });
+
     // Config
     const MONTHS = 6;
     let maxChartValue = 120; // Will be dynamically adjusted
