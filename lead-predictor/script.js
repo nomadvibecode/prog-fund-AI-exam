@@ -46,9 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
         let leads = 0;
         if (leadRate > 0) leads = Math.round((customers * 100) / leadRate);
 
-        // prospects * prospectRate% = leads => prospects = leads / (prospectRate/100)
+        // Leads * 100 / Percentage of responses from prospects = Prospects
         let prospects = 0;
-        if (prospectRate > 0) prospects = Math.round(leads / (prospectRate / 100));
+        if (prospectRate > 0) prospects = Math.round((leads * 100) / prospectRate);
 
         // Update Slider text
         leadRateVal.textContent = leadRate.toFixed(2);
