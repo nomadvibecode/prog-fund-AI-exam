@@ -42,9 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // customers = revenue / aov
         const customers = Math.round(revenue / aov);
         
-        // leads * leadRate% = customers => leads = customers / (leadRate/100)
+        // Clients * 100 / Percentage of responses from leads = Leads
         let leads = 0;
-        if (leadRate > 0) leads = Math.round(customers / (leadRate / 100));
+        if (leadRate > 0) leads = Math.round((customers * 100) / leadRate);
 
         // prospects * prospectRate% = leads => prospects = leads / (prospectRate/100)
         let prospects = 0;
