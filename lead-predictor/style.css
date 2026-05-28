@@ -1,16 +1,16 @@
 :root {
-    --bg-main: #13171f;
-    --bg-panel: #1e2433;
-    --bg-input: #131823;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --accent: #cbd5e1;
-    --border: #2d3748;
+    --bg-main: linear-gradient(45deg, #ff9a9e, #fecfef, #f6e2ff, #a1c4fd, #c2e9fb, #fff1eb);
+    --bg-panel: rgba(255, 255, 255, 0.6);
+    --bg-input: rgba(255, 255, 255, 0.8);
+    --text-primary: #5a189a;
+    --text-secondary: #7b2cbf;
+    --accent: #ff00ff;
+    --border: #f8adff;
     --font-family: 'Inter', sans-serif;
     
-    --bar-prospect: #64748b;
-    --bar-lead: #94a3b8;
-    --bar-customer: #e2e8f0;
+    --bar-prospect: #ffb3c6;
+    --bar-lead: #bde0fe;
+    --bar-customer: #fcf6bd;
 }
 
 * {
@@ -20,7 +20,9 @@
 }
 
 body {
-    background-color: var(--bg-main);
+    background: var(--bg-main);
+    background-size: 400% 400%;
+    animation: rainbowBackground 15s ease infinite;
     color: var(--text-primary);
     font-family: var(--font-family);
     min-height: 100vh;
@@ -28,6 +30,12 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
+}
+
+@keyframes rainbowBackground {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .dashboard {
@@ -53,7 +61,7 @@ body {
 }
 
 .logo i {
-    color: var(--text-primary);
+    color: var(--accent);
 }
 
 .main-container {
@@ -64,10 +72,11 @@ body {
 
 .panel {
     background-color: var(--bg-panel);
-    border-radius: 12px;
+    border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(255, 255, 255, 0.5);
+    border: 3px dashed var(--border);
+    backdrop-filter: blur(10px);
 }
 
 /* Left Sidebar */
@@ -105,7 +114,7 @@ body {
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
+    filter: invert(0);
 }
 
 .input-with-icon {
@@ -267,21 +276,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="range"] {
     -webkit-appearance: none;
     width: 100%;
-    height: 6px;
-    background: var(--bg-input);
-    border-radius: 3px;
+    height: 10px;
+    background: linear-gradient(90deg, #ff9a9e, #a1c4fd);
+    border-radius: 5px;
     outline: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #ffffff;
+    width: 35px;
+    height: 35px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🦄</text></svg>') center/contain no-repeat;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    box-shadow: none;
+    border: none;
+    margin-top: -15px; /* Adjusting to fit properly since track is thin */
 }
 
 /* Right Sidebar */
